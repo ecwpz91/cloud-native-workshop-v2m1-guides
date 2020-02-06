@@ -681,19 +681,7 @@ Back on the OpenShift console, Navigate to `Applications > Deployments` on the l
 
 ![inventory-dc]({% image_path inventory-dc.png %})
 
- Click on _Actions > Edit YAML_ tab in the top right then you will see the following variables in _spec.template.spec.containers.readinessProbe_ path:
-
-~~~yaml
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /health/ready
-              port: 8080
-              scheme: HTTP
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-~~~
+Click on _Actions > Edit YAML_ tab in the top right then you will see the following variables in _spec.template.spec.containers.readinessProbe_ path:
 
 ![inventory-healthcheck-webconsole]({% image_path inventory-healthcheck-webconsole.png %})
 
