@@ -458,7 +458,10 @@ First, deploy a new instance of PostgreSQL by executing the following commands v
 Then run:
 
 ~~~shell
-oc new-app -e POSTGRESQL_USER=inventory -e POSTGRESQL_PASSWORD=mysecretpassword -e POSTGRESQL_DATABASE=inventory openshift/postgresql:10 --name=inventory-database
+oc new-app -e POSTGRESQL_USER=inventory \
+           -e POSTGRESQL_PASSWORD=mysecretpassword \
+           -e POSTGRESQL_DATABASE=inventory openshift/postgresql:10 \
+           --name=inventory-database
 ~~~
 
 > NOTE: If you change the username and password you also need to update `src/main/resources/application.properties` which contains
