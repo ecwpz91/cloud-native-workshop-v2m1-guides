@@ -74,7 +74,7 @@ While the code is surprisingly simple, under the hood this is using:
  * RESTEasy to expose the REST endpoints
  * Hibernate ORM with Panache to perform CRUD operations on the database
  * A PostgreSQL database; see below to run one via Linux Container
- * Some example `Dockerfile`s to generate new images for JVM and Native mode compilation
+ * Some example `Dockerfiles` to generate new images for JVM and Native mode compilation
 
 `Hibernate ORM` is the de facto JPA implementation and offers you the full breadth of an Object Relational Mapper.
 It makes complex mappings possible, but it does not make simple and common mappings trivial. Hibernate ORM with
@@ -90,7 +90,7 @@ Now let's write some code and create a domain model, service interface and a RES
 
 We will add Quarkus extensions to the Inventory application for using `Panache` (a simplified way to access data via Hibernate ORM), a database with `Postgres` (in production) and `H2` (for testing) and we'll use the Quarkus Maven Plugin. Copy the following commands to add the _Hibernate ORM with Panache_ extension via CodeReady Workspaces Terminal:
 
-Go to `inventory' directory:
+Go to `inventory` directory:
 
 `cd /projects/cloud-native-workshop-v2m1-labs/inventory/`
 
@@ -110,7 +110,7 @@ With our skeleton project in place, let's get to work defining the business logi
 
 The first step is to define the model (entity) of an Inventory object. Since Quarkus uses Hibernate ORM Panache, we can re-use the same model definition from our monolithic application - no need to re-write or re-architect!
 
-Open up the empty **Inventory.java** file in _com.redhat.coolstore_ package and paste the following code into it (identical to the monolith code):
+Open up the empty `src/main/java/com/redhat/coolstore/Inventory.java` file and paste the following code into it (identical to the monolith code):
 
 ~~~java
 package com.redhat.coolstore;
@@ -150,9 +150,7 @@ This means the entity can be loaded quicker without querying the database for fr
 
 ---
 
-In this step we will mirror the abstraction of a _service_ so that we can inject the Inventory _service_ into various places (like a RESTful resource endpoint) in the future. This is the same approach that our monolith uses, so we can re-use this idea again. Open up the empty **InventoryResource.java** class in the _com.redhat.coolstore_ package.
-
-Add this code to it:
+In this step we will mirror the abstraction of a _service_ so that we can inject the Inventory _service_ into various places (like a RESTful resource endpoint) in the future. This is the same approach that our monolith uses, so we can re-use this idea again. Open up the empty `src/main/java/com/redhat/coolstore/InventoryResource.java` file and add this code to it:
 
 ~~~java
 package com.redhat.coolstore;
@@ -207,6 +205,7 @@ public class InventoryResource {
         }
 
     }
+
 }
 ~~~
 
@@ -421,7 +420,7 @@ There are two ways to set a custom profile, either via the `quarkus.profile` sys
 If both are set the system property takes precedence. Note that it is not necessary to define the names of these profiles anywhere,
 all that is necessary is to create a config property with the profile name, and then set the current profile to that name.
 
-Let's add the following variables in _src/main/resources/application.properties_:
+Let's add the following variables in `src/main/resources/application.properties`:
 
 ~~~shell
 %prod.quarkus.datasource.url=jdbc:postgresql://inventory-database:5432/inventory
@@ -459,10 +458,7 @@ First, deploy a new instance of PostgreSQL by executing the following commands v
 Then run:
 
 ~~~shell
-oc new-app -e POSTGRESQL_USER=inventory \
-  -e POSTGRESQL_PASSWORD=mysecretpassword \
-  -e POSTGRESQL_DATABASE=inventory openshift/postgresql:10 \
-  --name=inventory-database
+oc new-app -e POSTGRESQL_USER=inventory -e POSTGRESQL_PASSWORD=mysecretpassword -e POSTGRESQL_DATABASE=inventory openshift/postgresql:10 --name=inventory-database
 ~~~
 
 > NOTE: If you change the username and password you also need to update `src/main/resources/application.properties` which contains
@@ -522,13 +518,13 @@ with its single replica running in 1 pod, along with the Postgres database pod.
 
 This sample project includes a simple UI that allows you to access the Inventory API. This is the same
 UI that you previously accessed outside of OpenShift which shows the CoolStore inventory. Click on the
-route URL at `Networking > Routes` to access the sample UI.
+route URL at `Application > Routes` to access the sample UI.
 
 ![Overview link]({% image_path inventory-route-link.png %})
 
 > NOTE: If you get a '404 Not Found' error, just reload the page a few times until the Inventory UI appears. This is due to a lack of health check which you are about to fix!
 
-You can also access the application through the link on the `Project Status` page.
+You can also access the application through the link on the `Project Overview` page.
 
 ![Overview link]({% image_path inventory-route-link-status.png %})
 
@@ -599,7 +595,7 @@ The _checks_ array is empty as we have not specified any health check procedure 
 ---
 
 Next, let's fill in the class by creating a new RESTful endpoint which will be used by OpenShift to probe our services.
-Open empty Java class: **src/main/java/com/redhat/coolstore/InventoryHealthCheck.java** and the following logic will be put into a new Java class.
+Open empty Java class `src/main/java/com/redhat/coolstore/InventoryHealthCheck.java` and the following logic will be put into a new Java class.
 
 Replace the following codes with the exsiting entire codes:
 
@@ -683,22 +679,22 @@ Let's set _readiness probe_ in OpenShift using _InventoryHealthCheck_. Run the f
 
 This will instruct OpenShift to use the `/health/ready` endpoint to continually check the health of the app.
 
-Back on the OpenShift console, Navigate to _Deployment Configs_ on the left menu then click on _inventory-quarkus_:
+Back on the OpenShift console, Navigate to `Applications > Deployments` on the left menu then click on _inventory-quarkus_:
 
 ![inventory-dc]({% image_path inventory-dc.png %})
 
- Click on _YAML_ tab then you will see the following variables in _template.spec.containers.resources_ path:
+ Click on _Actions > Edit YAML_ tab in the top right then you will see the following variables in _spec.template.spec.containers.readinessProbe_ path:
 
 ~~~yaml
-        readinessProbe:
+          readinessProbe:
+            failureThreshold: 3
             httpGet:
               path: /health/ready
               port: 8080
               scheme: HTTP
-            timeoutSeconds: 1
             periodSeconds: 10
             successThreshold: 1
-            failureThreshold: 3
+            timeoutSeconds: 1
 ~~~
 
 ![inventory-healthcheck-webconsole]({% image_path inventory-healthcheck-webconsole.png %})
@@ -778,7 +774,7 @@ unhealthy.
 
 ![Greeting]({% image_path inventory-fail.png %})
 
-At this point, return to the [OpenShift web console]({{ CONSOLE_URL}}){:target="_blank"} and click on the _Pods_ on the left menu. Notice that the
+At this point, return to the [OpenShift web console]({{ CONSOLE_URL}}){:target="_blank"} and click on the _Overview_ on the left menu. Notice that the
 **ContainersNotReady** indicates the application is failing its _readiness probe_:
 
 ![Not Ready]({% image_path notready.png %})
