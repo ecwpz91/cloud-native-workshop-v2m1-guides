@@ -95,7 +95,7 @@ using this method makes the code much more portable.
 
 ---
 
-To begin we are fixing the issues under the Monolith application. Navigate to this folder in the project tree navigation pane to the left side, and edit the source files under there.
+To begin we are fixing the issues under the `monolith` application. Navigate to this folder in the project tree navigation pane to the left side, and edit the source files under there.
 
 Open the file `src/main/java/com/redhat/coolstore/utils/StartupListener.java`. Navigate the folder tree and double-click the source file to open it in the editing panel.
 
@@ -163,7 +163,7 @@ We will use the standard Java Logging framework, a much more portable framework.
 
 ---
 
-Navigate to the `Monolith Folder` and work on the source files under here.
+Navigate to the `monolith` application folder and work on the source files under here.
 
 Open the `src/main/java/com/redhat/coolstore/service/OrderServiceMDB.java` file and replace its contents with:
 
@@ -254,8 +254,8 @@ and configuration logic and settings. We will use the
 `@MessageDriven` and `@ActivationConfigProperty` annotations, along with the `MessageListener` interfaces to provide the
 same functionality as from Weblogic.
 
-Much of Weblogic's interfaces for EJB components like MDBs reside in Weblogic descriptor XML files. Open
-``src/main/webapp/WEB-INF/weblogic-ejb-jar.xml`` to see one of these descriptors. There are many different configuration
+Much of Weblogic's interfaces for EJB components like MDBs reside in Weblogic descriptor XML files. From the `monolith` application folder,
+open `src/main/webapp/WEB-INF/weblogic-ejb-jar.xml` to see one of these descriptors. There are many different configuration
 possibilities for EJBs and MDBs in this file, but luckily our application only uses one of them, namely it configures
 `<trans-timeout-seconds>` to 30, which means that if a given transaction within an MDB operation takes too
 long to complete (over 30 seconds), then the transaction is rolled back and exceptions are thrown. This interface is
@@ -299,7 +299,7 @@ Right-click on the `weblogic` folder and select **Delete** to delete the folder:
 
 ---
 
-Open the `src/main/java/com/redhat/coolstore/service/InventoryNotificationMDB.java` file and replace its contents with:
+From the `monolith` application folder, open the `src/main/java/com/redhat/coolstore/service/InventoryNotificationMDB.java` file and replace its contents with:
 
 ~~~java
 package com.redhat.coolstore.service;
@@ -412,7 +412,7 @@ plus Red Hat OpenShift bring to the table.
 
 ---
 
-Open the `pom.xml` file.
+Open the `pom.xml` file under the `monolith` application.
 
 At the `<!-- TODO: Add OpenShift profile here -->` we are going to add a the following configuration to the pom.xml
 
@@ -452,7 +452,7 @@ First, open a new brower with the [OpenShift web console]({{ CONSOLE_URL}}){:tar
 Login using:
 
 * Username: `userXX`
-* Password: `r3dh4t1!`
+* Password: `{{ OPENSHIFT_USER_PASSWORD }}`
 
 > **NOTE**: Use of self-signed certificates
 >
@@ -482,9 +482,11 @@ Click `Create Project`, fill in the fields, and click `Create`:
 
 ![create_dialog]({% image_path create_dialog.png %}){:width="700px"}
 
-This will take you to the project status. There's nothing there yet, but that's about to change.
+This will create a new project under the "My Projects" display. Click on the newly created `USERXX Coolstore Monolith - Dev` project.
 
 ![create_new]({% image_path create_new.png %})
+
+There's nothing there yet, but that's about to change.
 
 ####15. Deploy the monolith
 
@@ -492,12 +494,12 @@ This will take you to the project status. There's nothing there yet, but that's 
 
 Although your Eclipse Che workspace is running on the Kubernetes cluster, it's running with a default restricted _Service Account_ that prevents you from creating most resource types. If you've completed other modules, you're probably already logged in, but let's login again: open a Terminal and issue the following command:
 
-`oc login https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT --insecure-skip-tls-verify=true`
+`oc login {{ CONSOLE_URL}} -u  --insecure-skip-tls-verify=true`
 
 Enter your username and password assigned to you:
 
 * Username: `userXX`
-* Password: `r3dh4t1!`
+* Password: `{{ OPENSHIFT_USER_PASSWORD }}`
 
 You should see like:
 
@@ -588,7 +590,7 @@ When it's done you should see the application deployed successfully.
 
 ![build_done]({% image_path build_done.png %})
 
-Test the application by clicking on the Route link at `Networking > Routes` on the left menu:
+Test the application by clicking on the Route link at `Applications > Routes` on the left menu:
 
 ![route_link]({% image_path route_link.png %})
 
