@@ -290,7 +290,7 @@ The _ProductRepositoryTest_ also used another method called _findById(String id)
 
 The _ProductRepository_ should now have all the components, but we still need to tell spring how to connect to the database. For local development we will use the H2 in-memory database. When deploying this to OpenShift we are instead going to use the PostgreSQL database, which matches what we are using in production.
 
-The Spring Framework has a lot of sane defaults that can always seem magical sometimes, but basically all we have to do to setup the database driver is to provide some configuration values. Open _src/main/resources/application-default.properties_ and add the following properties where the comment says `#TODO: Add database properties`.
+The Spring Framework has a lot of sane defaults that can always seem magical sometimes, but basically all we have to do to setup the database driver is to provide some configuration values. Open `src/main/resources/application-default.properties` and add the following properties where the comment says `#TODO: Add database properties`.
 
 ~~~java
 spring.datasource.url=jdbc:h2:mem:catalog;DB_CLOSE_ON_EXIT=FALSE
@@ -562,7 +562,7 @@ There are no right or wrong answers here, but since this is a workshop on applic
 
 In the [Test-Driven Development](https://en.wikipedia.org/wiki/Test-driven_development){:target="_blank"} style, let's first extend our test to test the Inventory functionality (which doesn't exist).
 
-Open _src/test/java/com/redhat/coolstore/service/CatalogEndpointTest.java_ again.
+Open `src/test/java/com/redhat/coolstore/service/CatalogEndpointTest.java` again.
 
 Now at the markers **//TODO: Add check for Quantity** add the following line:
 
@@ -640,7 +640,7 @@ public interface InventoryClient {
 
 There is one more thing that we need to do which is to tell Feign where the inventory service is running. Before that notice that we are setting the `@FeignClient(name="inventory")`.
 
-Open the `src/main/resources/application-default.properties file.
+Open the `src/main/resources/application-default.properties` file.
 
 Add these properties to it at the `#TODO: Configure netflix libraries` marker:
 
@@ -654,7 +654,7 @@ By setting _inventory.ribbon.listOfServers_ we are hard coding the actual URL of
 
 Now that we have a client we can make use of it in our _CatalogService_.
 
-Open _src/main/java/com/redhat/coolstore/service/CatalogService.java_
+Open `src/main/java/com/redhat/coolstore/service/CatalogService.java`
 
 And autowire (e.g. inject) the client into it by inserting this at the `//TODO: Autowire Inventory Client` marker:
 
@@ -719,7 +719,7 @@ boilerplate code for doing a REST call. However Feign also have another good pro
 fallback logic. In this case we will use static inner class since we want the logic for the fallback to be part of the
 Client and not in a separate class.
 
-Open: _src/main/java/com/redhat/coolstore/client/InventoryClient.java_
+Open: `src/main/java/com/redhat/coolstore/client/InventoryClient.java`
 
 And paste this into it at the `//TODO: Add Fallback factory here` marker:
 
@@ -746,7 +746,7 @@ After creating the fallback factory all we have todo is to tell Feign to use tha
 
 Now let's see if we can test the fallback. Optimally we should create a different test that fails the request and then verify the fallback value, however because we are limited in time we are just going to change our test so that it returns a server error and then verify that the test fails.
 
-Open _src/test/java/com/redhat/coolstore/service/CatalogEndpointTest.java_ and change the following lines:
+Open `src/test/java/com/redhat/coolstore/service/CatalogEndpointTest.java` and change the following lines:
 
 ~~~
 @ClassRule
@@ -808,7 +808,7 @@ Make sure the test works again by re-running the `CatalogEndpointTest` JUnit Tes
 
 Having fallbacks is good but that also requires that we can correctly detect when a dependent services isn't responding correctly. Besides from not responding a service can also respond slowly causing our services to also respond slow. This can lead to cascading issues that is hard to debug and pinpoint issues with. We should therefore also have sane defaults for our services. You can add defaults by adding it to the configuration.
 
-Open _src/main/resources/application-default.properties_
+Open `src/main/resources/application-default.properties`
 
 And add this line to it at the **#TODO: Set timeout to for inventory to 500ms** marker:
 
@@ -816,7 +816,7 @@ And add this line to it at the **#TODO: Set timeout to for inventory to 500ms** 
 hystrix.command.inventory.execution.isolation.thread.timeoutInMilliseconds=500
 ~~~
 
-Open _src/test/java/com/redhat/coolstore/service/CatalogEndpointTest.java_ and un-comment the **.andDelay(2500, TimeUnit.MILLISECONDS).forMethod("GET")**
+Open `src/test/java/com/redhat/coolstore/service/CatalogEndpointTest.java` and un-comment the **.andDelay(2500, TimeUnit.MILLISECONDS).forMethod("GET")**
 
 Now you can run the _CatalogEndpointTest_ and verify that it **fails** via **Run Junit Test**:
 
@@ -891,13 +891,9 @@ First, deploy a new instance of PostgreSQL by executing via CodeReady Workspaces
 
 `oc project userXX-catalog`
 
-~~~shell
-oc new-app -e POSTGRESQL_USER=catalog \
-             -e POSTGRESQL_PASSWORD=mysecretpassword \
-             -e POSTGRESQL_DATABASE=catalog \
-             openshift/postgresql:10 \
-             --name=catalog-database
-~~~
+Then run:
+
+`oc new-app -e POSTGRESQL_USER=catalog -e POSTGRESQL_PASSWORD=mysecretpassword -e POSTGRESQL_DATABASE=catalog openshift/postgresql:10 --name=catalog-database`
 
 This will deploy the database to our new project.
 
@@ -911,7 +907,7 @@ You can also check if the deployment is complete via CodeReady Workspaces Termin
 
 ---
 
-Open the file _src/main/resources/application-default.properties_ in CodeReady Workspace.
+Open the file `src/main/resources/application-default.properties` in CodeReady Workspace.
 
 Comment the local variables and add a remote variables. You can replace the whole contents with the following variables to the file:
 
@@ -1007,7 +1003,7 @@ with running in 1 pod, along with the Postgres database pod.
 
 This sample project includes a simple UI that allows you to access the Inventory API. This is the same
 UI that you previously accessed outside of OpenShift which shows the CoolStore inventory. Click on the
-route URL at **Networking > Routes** in [OpenShift web console]({{ CONSOLE_URL}}){:target="_blank"} to access the sample UI.
+route URL at **Applications > Routes** in [OpenShift web console]({{ CONSOLE_URL}}){:target="_blank"} to access the sample UI.
 
 > You can also access the application through the link on Resources tab in the Project Status page.
 
@@ -1033,7 +1029,7 @@ For the home page the product list is loaded via a REST call to *http://<monolit
 
 Follow the steps below to create **Cross-origin resource sharing (CORS)** based route. CORS is a mechanism that allows restricted resources on a web page to be requested from another domain outside the domain from which the first resource was served.
 
-Create **CORSProvider** class in _src/main/java/com/redhat/coolstore_ of **inventory** project to allow restricted resources on a _catalog_ service. Copy the following all codes in the class:
+Create **CORSProvider** class in `src/main/java/com/redhat/coolstore` of **inventory** project to allow restricted resources on a _catalog_ service. Copy the following all codes in the class:
 
 ~~~java
 package com.redhat.coolstore;
@@ -1070,7 +1066,7 @@ Restart and watch the build, which will take about a minute to complete. Replace
 
 Once the build is done, the inventory pod will be deployed automatically via DeploymentConfig Trigger in OpenShift.
 
-Open **CatalogEndpoint** class in _src/main/java/com/redhat/coolstore/service_ of **catalog** project to allow restricted resources on a _product_ page of the monolith application. Add *@CrossOrigin* annotation on _CatalogEndpoint_ class:
+Open **CatalogEndpoint** class in `src/main/java/com/redhat/coolstore/service` of **catalog** project to allow restricted resources on a _product_ page of the monolith application. Add *@CrossOrigin* annotation on _CatalogEndpoint_ class:
 
 ~~~java
 @RestController
@@ -1088,8 +1084,6 @@ The build and deploy may take a minute or two. Wait for it to complete. You shou
 end of the build output.
 
 Restart and watch the build, which will take about a minute to complete. Replace your username with **userXX**:
-
-`cd /projects/cloud-native-workshop-v2m1-labs/catalog/`
 
 `oc start-build catalog-springboot --from-file=target/catalog-1.0.0-SNAPSHOT.jar --follow -n userXX-catalog`
 
@@ -1127,7 +1121,7 @@ Once the build is done, the coolstore pod will be deployed automatically via Dep
 
 ---
 
-Open the monolith UI at by selecting the `userXX-coolstore-dev` project in the [OpenShift web console]({{ CONSOLE_URL}}){:target="_blank"}, navigate to _Networking > Routes_ and click on the link to the monolith UI.
+Open the monolith UI at by selecting the `userXX-coolstore-dev` project in the [OpenShift web console]({{ CONSOLE_URL}}){:target="_blank"}, navigate to Applications > Routes_ and click on the link to the monolith UI.
 
 Observe that the new catalog is being used along with the monolith:
 
