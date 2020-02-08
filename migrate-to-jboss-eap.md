@@ -494,7 +494,7 @@ There's nothing there yet, but that's about to change.
 
 Although your Eclipse Che workspace is running on the Kubernetes cluster, it's running with a default restricted _Service Account_ that prevents you from creating most resource types. If you've completed other modules, you're probably already logged in, but let's login again: open a Terminal and issue the following command:
 
-`oc login {{ CONSOLE_URL}}  --insecure-skip-tls-verify=true`
+`oc login {{ CONSOLE_URL}} --insecure-skip-tls-verify=true`
 
 Enter your username and password assigned to you:
 
