@@ -104,21 +104,21 @@ The Dashboard gives an overview of the entire application migration effort. It s
 
 There are several other sub-pages accessible by the menu near the top. Click on each one and observe the results for each of these pages:
 
-* `All Applications` Provides a list of all applications scanned.
-* `Dashboard` Provides an overview for a specific application.
-* `Issues` Provides a concise summary of all issues that require attention.
+* `All Applications` provides a list of all applications scanned.
+* `Dashboard` provides an overview for a specific application.
+* `Issues` provides a concise summary of all issues that require attention.
 * `Application Details` provides a detailed overview of all resources found within the application that may need attention during the migration.
 * `Technologies` reports a statistic of technologies occurrences in the input applications.
 * `Dependencies Graph` shows the dependencies embedded within the analyzed application.
 * `Dependencies` displays all Java-packaged dependencies found within the application.
 * `Unparsable` shows all files that RHAMT could not parse in the expected format. For instance, a file with a .xml or .wsdl suffix is assumed to be an XML file. If the XML parser fails, the issue is reported here and also where the individual file is listed.
 * `EJBs` contains a list of EJBs found within the application.
-* `Remote Services` Displays all remote services references that were found within the application.
+* `Remote Services` displays all remote services references that were found within the application.
 * `JBPM` contains all of the JBPM-related resources that were discovered during analysis.
 * `JPA` contains details on all JPA-related resources that were found in the application.
 * `Tattletale` report contains the results of running Tattletale on the input application.
 * `Ignored Files` report lists the files in the application that have not been processed based on certain rules and the Red Hat Application Migration Toolkit configuration.
-* `About` Describes the current version of RHAMT and provides helpful links for further assistance.
+* `About` describes the current version of RHAMT and provides helpful links for further assistance.
 
 > Some of the above sections may not appear depending on what was detected in the project.
 
