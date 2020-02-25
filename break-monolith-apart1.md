@@ -717,7 +717,7 @@ You should see:
 
 ---
 
-The various timeout values for the probes can be configured in many ways. Let's tune the _readiness probe_ initial delay so that we have to wait 3o seconds for it to be activated. Use the _oc_ command to tune the probe to wait 30 seconds before starting to poll the probe:
+The various timeout values for the probes can be configured in many ways. Let's tune the _readiness probe_ initial delay so that we have to wait 30 seconds for it to be activated. Use the _oc_ command to tune the probe to wait 30 seconds before starting to poll the probe:
 
 `oc set probe dc/inventory-quarkus --readiness --initial-delay-seconds=30`
 
