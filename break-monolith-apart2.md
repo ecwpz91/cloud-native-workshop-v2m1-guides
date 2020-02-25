@@ -1029,7 +1029,7 @@ For the home page the product list is loaded via a REST call to *http://<monolit
 
 Follow the steps below to create **Cross-origin resource sharing (CORS)** based route. CORS is a mechanism that allows restricted resources on a web page to be requested from another domain outside the domain from which the first resource was served.
 
-Create **CORSProvider** class in `src/main/java/com/redhat/coolstore` of **inventory** project to allow restricted resources on a _catalog_ service. Copy the following all codes in the class:
+Create `CORSProvider` class in `src/main/java/com/redhat/coolstore` of **inventory** project to allow restricted resources on a _catalog_ service. Copy the following all codes in the class:
 
 ~~~java
 package com.redhat.coolstore;
